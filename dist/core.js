@@ -74,7 +74,7 @@ export function generateRecipeCandidates(settings,meal,nonce=Date.now()){
  const add=(title,items,time,steps)=>{const r=newRecipe(title,items,time,steps,meal,nonce);if(eligible(r,{...s,maxTime:limit},meal))out.push(r);};
  const label=k=>foods[k].name.split(' (')[0];
  if(meal==='Frühstück'||meal==='Snack'){
-  for(const dairy of ['skyr','joghurt'])for(const grain of ['hafer','hafergf'])for(const fruit of ['beeren','apfel','banane'])for(const amount of [25,50,80]){
+  for(const dairy of ['skyr','joghurt'])for(const grain of ['hafer','hafergf'])for(const fruit of ['beeren','apfel','banane'])for(const amount of (s.goals.includes('Kalorienreich')?[100,130,160]:[25,50,80])){
    const dq=s.goals.includes('Proteinreich')?(dairy==='skyr'?250:400):200;
    add(`${label(dairy)} mit ${label(fruit)} und ${label(grain)}`,[ingredient(dairy,dq),ingredient(grain,amount),ingredient(fruit,fruit==='banane'?1:120)],5,['Obst waschen, bei Bedarf schälen und klein schneiden.','Joghurt oder Skyr mit den Haferflocken verrühren. Bei Bedarf etwas Wasser ergänzen.','Obst darauf verteilen und direkt servieren.']);
   }
@@ -86,15 +86,15 @@ export function generateRecipeCandidates(settings,meal,nonce=Date.now()){
   const low=s.goals.includes('Low Carb');if(low&&base)continue;
   const high=s.goals.includes('Proteinreich');const energy=s.goals.includes('Kalorienreich');
   const pq=protein==='ei'?(high?4:3):Math.round(({bohnen:high?320:200,kicher:high?350:200,tofu:high?210:150,linsen:high?110:80})[protein]*scale);
-  const items=[ingredient(protein,pq),ingredient(veg,200)];if(base)items.push(ingredient(base,base==='kartoffel'?250:energy?110:60));
+  const items=[ingredient(protein,pq),ingredient(veg,200)];if(energy&&low)items.push(ingredient('oel',35));if(base)items.push(ingredient(base,base==='kartoffel'?250:energy?110:60));
   const cold=['bohnen','kicher','tofu'].includes(protein)&&['tomaten','gurke','karotte'].includes(veg)&&!base;
-  const time=Math.max(cold?8:protein==='linsen'?25:15,base==='reis'?25:base==='kartoffel'?25:base==='pasta'?20:base==='couscous'?10:0);
+  const time=Math.max(cold?5:protein==='linsen'?25:15,base==='reis'?25:base==='kartoffel'?25:base==='pasta'?20:base==='couscous'?10:0);
   const steps=[];
   if(base)steps.push(base==='couscous'?'Couscous nach Packungsangabe mit kochendem Wasser übergießen und quellen lassen.':base==='kartoffel'?'Kartoffeln schälen, klein würfeln und in Wasser weich garen (etwa 15–20 Minuten).':`${label(base)} nach Packungsangabe in Wasser garen.`);
   steps.push(protein==='linsen'?'Trockene rote Linsen gründlich spülen und mit etwa der dreifachen Menge Wasser 15–20 Minuten weich kochen; bei Bedarf Wasser ergänzen.':['bohnen','kicher'].includes(protein)?'Bereits gegarte Hülsenfrüchte abgießen und gründlich abspülen.':protein==='ei'?'Eier in eine Schale aufschlagen und verquirlen.':'Naturtofu abtropfen lassen und würfeln.');
   steps.push(`${label(veg)} waschen${veg==='spinat'?'':', bei Bedarf schälen und klein schneiden'}.`);
   if(cold)steps.push('Die vorbereiteten Zutaten in einer Schale vermengen. Nach Geschmack würzen und direkt servieren.');
-  else{steps.push(veg==='gurke'?'Die Gurke als frische Beilage beiseitestellen.':`Gemüse mit einigen Esslöffeln Wasser in einer beschichteten Pfanne 8–12 Minuten garen; bei Bedarf Wasser nachgießen.`);steps.push(protein==='ei'?'Eier zum gegarten Gemüse geben und unter Rühren vollständig stocken lassen.':`${label(protein)} dazugeben und vollständig durcherhitzen${protein==='tofu'?' (etwa 5 Minuten)':''}.`);steps.push(base?'Mit der gegarten Beilage anrichten und nach Geschmack würzen.':'In einer Schale anrichten und nach Geschmack würzen.');}
+  else{steps.push(veg==='gurke'?'Die Gurke als frische Beilage beiseitestellen.':`Gemüse mit einigen Esslöffeln Wasser in einer beschichteten Pfanne 6–8 Minuten garen; bei Bedarf Wasser nachgießen.`);steps.push(protein==='ei'?'Eier zum gegarten Gemüse geben und unter Rühren vollständig stocken lassen.':`${label(protein)} dazugeben und vollständig durcherhitzen${protein==='tofu'?' (etwa 5 Minuten)':''}.`);if(energy&&low)steps.push('Das abgemessene Olivenöl unter das fertige Gericht mischen.');steps.push(base?'Mit der gegarten Beilage anrichten und nach Geschmack würzen.':'In einer Schale anrichten und nach Geschmack würzen.');}
   add(`${label(protein)}-${label(veg)}-${cold?'Schale':'Pfanne'}${base?' mit '+label(base):''}`,items,time,steps);
  }
  // Shuffle real ingredient/quantity variants, rather than renaming existing recipes.
