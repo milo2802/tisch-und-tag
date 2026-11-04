@@ -31,7 +31,7 @@ Node.js 22 oder neuer. `node server.mjs` starten und http://127.0.0.1:8080 öffn
 
 ## Preis-, Bild- und Rezeptquellen
 
-Acht eigene Beispielrezepturen. Alle mitgelieferten Preise sind frei gewählte Beispielwerte vom 04.11.2026, keine beobachteten aktuellen Supermarktpreise oder Live-Angebote. Nährwerte sind Schätzungen pro Portion. Unsplash-Bilder sind illustrative Serviervorschläge, keine exakten Rezeptfotos. Bild-URLs stehen in app.js; vor kommerzieller Weiterverwendung die konkrete Bildauswahl und Lizenzbedingungen prüfen. Bei Teilplanung werden Werte nicht als vollständige Tagesernährung dargestellt.
+Acht eigene Beispielrezepturen plus neue regelbasierte Rezeptzusammenstellungen aus einem erweiterten Zutatenkatalog. Alle mitgelieferten Preise sind frei gewählte Beispielwerte vom 04.11.2026, keine beobachteten aktuellen Supermarktpreise oder Live-Angebote. Nährwerte sind Schätzungen pro Portion. Unsplash-Bilder sind illustrative Serviervorschläge, keine exakten Rezeptfotos. Bild-URLs stehen in app.js; vor kommerzieller Weiterverwendung die konkrete Bildauswahl und Lizenzbedingungen prüfen. Bei Teilplanung werden Werte nicht als vollständige Tagesernährung dargestellt.
 
 ## Optionaler Website-Import
 
@@ -43,7 +43,7 @@ Instagram-/TikTok-API, Transkripte und Screenshot-Auswertung sind nicht eingeric
 
 ## Grenzen der ersten Version
 
-- Tages- und Mahlzeitenauswahl gelten kombiniert; keine unterschiedliche Mahlzeitenmatrix pro Tag.
+- Der Zeitraum kann 1–28 Tage umfassen; innerhalb des Zeitraums werden gewählte Wochentage und Mahlzeiten kombiniert. Keine unterschiedliche Mahlzeitenmatrix pro Tag.
 - Automatische Planung berücksichtigt Ernährung, Zeit und aktive Nährwertregeln, sucht aber heuristisch nach günstigen Packungen. Keine Garantie für globale Budgetoptimalität. Unpassende Slots bleiben mit Erklärung leer. Einstellungen werden nicht still verändert.
 - Meal Prep/Reste sind manuell verknüpfbar. Kein Kochhäufigkeitsziel und keine automatische Resteoptimierung.
 - Alle 14 Allergengruppen auswählbar; Getreide-/Nussarten noch nicht separat. Laktosefrei schließt konservativ sämtliche Milchzutaten aus. Zusammensetzung eigener Zutaten bleibt ungeprüft; bei Allergenausschlüssen werden solche Rezepte nicht automatisch gewählt. Etiketten und Spurenhinweise prüfen; keine Kreuzkontaminationsgarantie.
@@ -55,4 +55,14 @@ Instagram-/TikTok-API, Transkripte und Screenshot-Auswertung sind nicht eingeric
 
 ## Prüfungen
 
-Acht Tests prüfen Portionsskalierung, ganze Packungen, Vorräte, Reste, Ernährung/Allergene/ungeprüfte Zutaten, ausgewählte Planungsfelder, Fixierungen, Textimport und Schnellsuche. Zusätzlich wurde im Browser Planung, Datenerhalt nach Neuladen, Textimport mit vorheriger Korrektur und Schnellsuche (5 Euro / eine Portion / proteinreich) geprüft. Physische Handyinstallation und Website-Import an einer freigegebenen externen Rezeptquelle stehen noch aus.
+Elf Tests prüfen Portionsskalierung, ganze Packungen, Vorräte, Reste, Ernährung/Allergene/ungeprüfte Zutaten, ausgewählte Planungsfelder, Fixierungen, Textimport und Schnellsuche. Zusätzlich wurde im Browser Planung, Datenerhalt nach Neuladen, Textimport mit vorheriger Korrektur und Schnellsuche (5 Euro / eine Portion / proteinreich) geprüft. Physische Handyinstallation und Website-Import an einer freigegebenen externen Rezeptquelle stehen noch aus.
+
+## Geführte Planung und neue Rezepte (Version 2)
+
+„Neue Woche planen“ öffnet einen Dialog mit sieben Schritten: Zeitraum/Personen (1–5 oder eigene Zahl), Budgetregler von 40 bis 80 Euro plus eigener Betrag, geschätzte Zeitlimits getrennt nach Mahlzeit, Tage/Mahlzeiten, Ernährungsform mit „Auf nichts achten / egal“, antippbare Ernährungsziele und Allergene/Unverträglichkeiten. Vorwärts und rückwärts navigierbar; Abbrechen verändert den bestehenden Plan nicht. „Plan erstellen“ ordnet alle ausgewählten Mahlzeiten automatisch zu. Die Übersicht zeigt sämtliche Tage mit Frühstück/Mittag-/Abendessen bzw. den gewählten Mahlzeiten.
+
+Der Browser erzeugt neue Rezeptobjekte aus realen Zutatenkombinationen, Mengen, geschätzten Zutaten-Nährwerten und kochmethodenspezifischen Schritten. Mengen, Packungskosten und Allergene werden anschließend geprüft. Dies ist ein kombinatorischer, regelbasierter Generator und keine externe, frei formulierende KI. Er benötigt keinen API-Schlüssel und funktioniert auf GitHub Pages. Mögliche Varianten sind durch Katalog und Kochregeln begrenzt. Sehr enge oder widersprüchliche Bedingungen können weiterhin unerfüllbar sein; sie werden nicht stillschweigend aufgeweicht.
+
+Standardregeln pro Portion: kalorienarm höchstens 450 kcal, kalorienreich mindestens 650 kcal, proteinreich mindestens 25 g Protein, Low Carb höchstens 30 g Kohlenhydrate. Keine Zahleneingabe mehr im Planungsdialog; Regeln im ausklappbaren Erklärungstext. Kalorienarm und kalorienreich sind zusammen nicht auswählbar. „Ausgewogen“ bevorzugt zusätzlich eine Sättigungsbeilage zu Gemüse/Protein. Keine Aussage über eine vollständige Tagesversorgung.
+
+Zusätzliche Tests prüfen neue Rezepte ohne persönliche Sammlung, mahlzeitenspezifische Zeitlimits, aktive Allergenausschlüsse, neue Rezept-IDs und die Auswahl tatsächlicher Wochentage bei einem mehrwöchigen Zeitraum.
